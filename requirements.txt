@@ -1,0 +1,12 @@
+flask
+sqlalchemy
+requests
+python-dotenv
+charset_normalizer
+idna
+certifi
+markupsafe
+click
+blinker
+jinja2
+itsdangerous

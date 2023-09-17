@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}
+Lobbyists Data
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="Page navigation top" class="my-4">
+        <ul class="pagination justify-content-center">
+          {% if page > 1 %}
+            <li class="page-item">
+              <a class="page-link" href="{{ url_for('get_lobbyists', page=page-1) }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+          {% endif %}
+
+          <li class="page-item disabled">
+            <span class="page-link">Page {{ page }}</span>
+          </li>
+
+          {% if page * per_page < total_data %}
+            <li class="page-item">
+              <a class="page-link" href="{{ url_for('get_lobbyists', page=page + 1) }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+
+      <h1 class="my-4">Lobbyists Data</h1>
+      <ul class="list-group">
+        {% for lobbyist in data %}
+            <li class="list-group-item">
+                <strong>Registrant ID:</strong> {{ lobbyist.id }} <br>
+                <strong>Name:</strong> {{ lobbyist.first_name }} {{ lobbyist.last_name }}<br>
+                <strong>Company:</strong> {{ lobbyist.registrant.name }}<br>
+                <strong>Address:</strong> {{ lobbyist.registrant.address_1 }}, {{ lobbyist.registrant.city }}, {{ lobbyist.registrant.state_display }} {{ lobbyist.registrant.zip }}<br>
+                <strong>Contact:</strong> {{ lobbyist.registrant.contact_name }}, {{ lobbyist.registrant.contact_telephone }}
+            </li>
+        {% endfor %}
+      </ul>
+
+      <nav aria-label="Page navigation bottom" class="my-4">
+        <ul class="pagination justify-content-center">
+          {% if page > 1 %}
+            <li class="page-item">
+              <a class="page-link" href="{{ url_for('get_lobbyists', page=page-1) }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+          {% endif %}
+
+          <li class="page-item disabled">
+            <span class="page-link">Page {{ page }}</span>
+          </li>
+
+          {% if page * per_page < total_data %}
+            <li class="page-item">
+              <a class="page-link" href="{{ url_for('get_lobbyists', page=page + 1) }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+{% endblock %}
