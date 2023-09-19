@@ -7,13 +7,13 @@ from db.models import (
     Registrant,
     Client,
     Lobbyist,
-    Contribution_ItemTypes,
+    ContributionItemTypes,
     Countries,
-    Lobby_Activity_Issues,
+    LobbyActivityIssues,
     States,
-    Filing_Types,
-    Lobbist_Suffixes,
-    Lobbist_Prefixes
+    FilingTypes,
+    LobbistSuffixes,
+    LobbistPrefixes
 )
 from db.session import engine
 

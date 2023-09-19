@@ -13,8 +13,12 @@
             <li class="nav-item {% if active_page == 'lobbyists' %}active{% endif %}">
                 <a class="nav-link" href="{{ url_for('get_lobbyists') }}">Lobbyists</a>
             </li>
+            <li class="nav-item {% if active_page == 'filings' %}active{% endif %}">
+                <a class="nav-link" href="{{ url_for('get_filings') }}">Filings</a>
+            </li>
             <!-- Add more navigation -->
         </ul>
     </div>
 </nav>
+
 

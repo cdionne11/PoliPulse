@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 import os
 from dotenv import load_dotenv
-from scripts.fetch_data import fetch_lobbyist_data
+from scripts.fetch_data import fetch_lobbyist_data, fetch_filing_data
 
 load_dotenv()
 
@@ -42,17 +42,30 @@ def get_lobbyists():
 
 @app.route('/filings', methods=['GET'])
 def get_filings():
-    """Endpoint to retrieve data on filings.
+    page = request.args.get('page', 1, type=int)
+    filing_year = request.args.get('filing_year', 2023, type=int)
+    per_page = 10
+    data = fetch_filing_data(page=page, per_page=per_page, filing_year=filing_year)
 
-    Returns:
-        json: A JSON object containing a list of filings.
-    """
-    session = SessionLocal()
-    try:
-        filings = session.query(Filing).all()
-        return jsonify([filing.to_dict() for filing in filings])
-    finally:
-        session.close()
+    if data:
+        total_data = data.get('count', 0)
+        results = data.get('results', [])
+    else:
+        total_data = 0
+        results = []
+
+    total_pages = (total_data + per_page - 1) // per_page
+
+    return render_template(
+        'filings.html',
+        data=results,
+        page=page,
+        per_page=per_page,
+        total_data=total_data,
+        total_pages=total_pages,
+        active_page='filings'
+    )
+
 
 
 @app.route('/contributions', methods=['GET'])

@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import requests
-from db.models import Filing, Contribution, Registrant, Client, Lobbyist, Filing_Types, Lobby_Activity_Issues, Government_Entities, Countries, States, Lobbist_Prefixes, Lobbist_Suffixes, Contribution_ItemTypes
+from db.models import Filing, Contribution, Registrant, Client, Lobbyist, FilingTypes, LobbyActivityIssues, \
+    GovernmentEntities, Countries, States, LobbistPrefixes, LobbistSuffixes, ContributionItemTypes
 
 # Load environment variables
 load_dotenv()
@@ -67,20 +68,34 @@ def fetch_lobbyist_data(page=1, per_page=10):
     data = response.json()
     return data
 
+
+def fetch_filing_data(page=1, per_page=10, filing_year=2023):
+    url = f"https://lda.senate.gov/api/v1/filings/?filing_year={filing_year}&page={page}&page_size={per_page}"
+    response = requests.get(url)
+    print(response)
+    if response.status_code == 200:
+        data = response.json()
+        return data
+    else:
+        print(f"Failed to retrieve data. HTTP Status code: {response.status_code}")
+        return None
+
+
+
 def main():
     fetch_data('filings', Filing)
     fetch_data('contributions', Contribution)
     fetch_data('registrants', Registrant)
     fetch_data('clients', Client)
     fetch_data('lobbyists', Lobbyist)
-    fetch_data('filing_types', Filing_Types)
-    # fetch_data('lobby_activity_issues', Lobby_Activity_Issues)
-    # fetch_data('government_entities', Government_Entities)
+    fetch_data('filing_types', FilingTypes)
+    # fetch_data('lobby_activity_issues', LobbyActivityIssues)
+    # fetch_data('government_entities', GovernmentEntities)
     # fetch_data('countries', Countries)
     # fetch_data('states', States)
-    # fetch_data('lobbiest_prefixes', Lobbist_Prefixes)
-    # fetch_data('lobbiest_suffixes', Lobbist_Suffixes)
-    # fetch_data('contribution_item_types', Contribution_ItemTypes)
+    # fetch_data('lobbiest_prefixes', LobbistPrefixes)
+    # fetch_data('lobbiest_suffixes', LobbistSuffixes)
+    # fetch_data('contribution_item_types', ContributionItemTypes)
 
 
 if __name__ == "__main__":
