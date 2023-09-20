@@ -20,8 +20,13 @@ def home():
     return render_template('index.html', active_page='home')
 
 
-@app.route('/lobbyists', methods=['GET'])
-def get_lobbyists():
+@app.route('/lobbyist', methods=['GET'])
+def load_lobbyists():
+    return render_template('lobbyist.html', active_page='lobbyist')
+
+
+@app.route('/lobbyist_data', methods=['GET'])
+def get_lobbyist():
     page = request.args.get('page', 1, type=int)
     per_page = 10
     data = fetch_lobbyist_data(page=page, per_page=per_page)
@@ -31,12 +36,12 @@ def get_lobbyists():
     print(data['results'])  # Add this line to print data and check if it's correct
 
     return render_template(
-        'lobbyists.html',
+        'lobbyists_data.html',
         data=data['results'],  # Pass only the 'results' part of data to the template
         page=page,
         per_page=per_page,
         total_data=total_data,  # Updated line to pass total_data
-        active_page='lobbyists'
+        active_page='lobbyist_data'
     )
 
 

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Lobbyist Home
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="jumbotron mt-3">
+        <h1 class="display-4">Lobbyist Data</h1>
+        <p class="lead">Research Lobbyist.</p>
+        <hr class="my-4">
+        <p>Click the buttons below to explore the lobbyist, filings, and contributions data.</p>
+        <p class="lead">
+            <a class="btn btn-primary btn-lg mr-2" href="/lobbyist_data" role="button">Explore Lobbyists</a>
+            <a class="btn btn-primary btn-lg mr-2" href="/filings" role="button">Explore Filings</a>
+            <a class="btn btn-primary btn-lg mr-2" href="/contributions" role="button">Explore Contributions</a>
+        </p>
+    </div>
+    <div class="resources-section mt-5">
+        <h2>Resources</h2>
+        <p>Find guidelines and other resources below:</p>
+        <ul class="list-unstyled">
+            <li><a href="http://lobbyingdisclosure.house.gov/ldaguidance.pdf" target="_blank">LDA Guidance PDF</a></li>
+            <!-- Add more PDFs or resources as list items here -->
+        </ul>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-Lobbyists Data
+    Lobbyists Data
 {% endblock %}
 
 {% block content %}
@@ -10,7 +10,7 @@ Lobbyists Data
         <ul class="pagination justify-content-center">
           {% if page > 1 %}
             <li class="page-item">
-              <a class="page-link" href="{{ url_for('get_lobbyists', page=page-1) }}" aria-label="Previous">
+              <a class="page-link" href="{{ url_for('get_lobbyist', page=page-1) }}" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
               </a>
             </li>
@@ -22,7 +22,7 @@ Lobbyists Data
 
           {% if page * per_page < total_data %}
             <li class="page-item">
-              <a class="page-link" href="{{ url_for('get_lobbyists', page=page + 1) }}" aria-label="Next">
+              <a class="page-link" href="{{ url_for('get_lobbyist', page=page + 1) }}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
               </a>
             </li>
@@ -47,7 +47,7 @@ Lobbyists Data
         <ul class="pagination justify-content-center">
           {% if page > 1 %}
             <li class="page-item">
-              <a class="page-link" href="{{ url_for('get_lobbyists', page=page-1) }}" aria-label="Previous">
+              <a class="page-link" href="{{ url_for('get_lobbyist', page=page-1) }}" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
               </a>
             </li>
@@ -59,7 +59,7 @@ Lobbyists Data
 
           {% if page * per_page < total_data %}
             <li class="page-item">
-              <a class="page-link" href="{{ url_for('get_lobbyists', page=page + 1) }}" aria-label="Next">
+              <a class="page-link" href="{{ url_for('get_lobbyist', page=page + 1) }}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
               </a>
             </li>
