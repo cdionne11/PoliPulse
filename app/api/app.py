@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 import os
 from dotenv import load_dotenv
-from scripts.fetch_data import fetch_lobbyist_data, fetch_filing_data
+from scripts.fetch_data import fetch_lobbyist_data, fetch_filing_data, fetch_contribution_data
 
 load_dotenv()
 
@@ -67,7 +67,6 @@ def get_filings():
     )
 
 
-
 @app.route('/contributions', methods=['GET'])
 def get_contributions():
     """Endpoint to retrieve data on contributions.
@@ -75,12 +74,29 @@ def get_contributions():
     Returns:
         json: A JSON object containing a list of contributions.
     """
-    session = SessionLocal()
-    try:
-        contributions = session.query(Contribution).all()
-        return jsonify([contribution.to_dict() for contribution in contributions])
-    finally:
-        session.close()
+    page = request.args.get('page', 1, type=int)
+    filing_year = request.args.get('filing_year', 2023, type=int)
+    per_page = 10
+    data = fetch_contribution_data(page=page, per_page=per_page, filing_year=filing_year)  # Corrected the function name
+
+    if data:
+        total_data = data.get('count', 0)
+        results = data.get('results', [])
+    else:
+        total_data = 0
+        results = []
+
+    total_pages = (total_data + per_page - 1) // per_page
+
+    return render_template(
+        'contributions.html',
+        data=results,
+        page=page,
+        per_page=per_page,
+        total_pages=total_pages,
+        total_data=total_data,
+        active_page='contributions'
+    )
 
 
 if __name__ == '__main__':

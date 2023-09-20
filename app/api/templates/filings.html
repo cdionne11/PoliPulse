@@ -31,42 +31,87 @@
                 {% endif %}
             </ul>
         </nav>
-        <h1 class="my-4">Filings Data</h1>
-        <ul class="list-group">
+        <h1 class="text-center my-4">Filings Data</h1>
+
+        <div class="row">
             {% for item in data %}
-                <div>
-                    <p>Filing URL: <a href="{{ item.url }}">{{ item.url }}</a></p>
-                    <p>Filing UUID: {{ item.filing_uuid }}</p>
-                    <p>Filing Type: {{ item.filing_type }}</p>
-                    <p>Filing Type Display: {{ item.filing_type_display }}</p>
-                    <p>Filing Year: {{ item.filing_year }}</p>
-                    <p>Filing Period: {{ item.filing_period }}</p>
-                    <p>Filing Period Display: {{ item.filing_period_display }}</p>
-                    <p>Filing Document URL: <a href="{{ item.filing_document_url }}">{{ item.filing_document_url }}</a>
-                    </p>
-                    <p>Registrant Name: {{ item.registrant.name }}</p>
-                    <p>Registrant
-                        Address: {{ item.registrant.address_1 }}, {{ item.registrant.city }}, {{ item.registrant.state_display }}, {{ item.registrant.zip }}</p>
-                    <p>Client Name: {{ item.client.name }}</p>
-                    <p>Client State: {{ item.client.state_display }}</p>
-                    <p>Lobbying Activities:</p>
-                    <ul>
-                        {% for activity in item.lobbying_activities %}
-                            <li>General Issue Code: {{ activity.general_issue_code }}</li>
-                            <li>Government Entities:</li>
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.registrant.name }}</h5>
+                            <p class="card-text">
+                                {% if item.url %}
+                                    <strong>Filing URL: </strong><a href="{{ item.url }}">{{ item.url }}</a><br>
+                                {% endif %}
+
+                                {% if item.filing_uuid %}
+                                    <strong>Filing UUID: </strong>{{ item.filing_uuid }}<br>
+                                {% endif %}
+
+                                {% if item.filing_type %}
+                                    <strong>Filing Type: </strong>{{ item.filing_type }}<br>
+                                {% endif %}
+
+                                {% if item.filing_type_display %}
+                                    <strong>Filing Type Display: </strong>{{ item.filing_type_display }}<br>
+                                {% endif %}
+
+                                {% if item.filing_year %}
+                                    <strong>Filing Year: </strong>{{ item.filing_year }}<br>
+                                {% endif %}
+
+                                {% if item.filing_period %}
+                                    <strong>Filing Period: </strong>{{ item.filing_period|replace("_", " ")|title }}<br>
+                                {% endif %}
+
+
+                                {% if item.filing_period_display %}
+                                    <strong>Filing Period Display: </strong>{{ item.filing_period_display }}<br>
+                                {% endif %}
+
+                                {% if item.filing_document_url %}
+                                    <strong>Filing Document URL: </strong><a
+                                        href="{{ item.filing_document_url }}">{{ item.filing_document_url }}</a><br>
+                                {% endif %}
+
+                                {% if item.registrant.address_1, item.registrant.city, item.registrant.state_display, item.registrant.zip %}
+                                    <strong>Registrant
+                                        Address: </strong>{{ item.registrant.address_1 }}, {{ item.registrant.city }},
+                                    {{ item.registrant.state_display }}, {{ item.registrant.zip }}<br>
+                                {% endif %}
+
+                                {% if item.client.name %}
+                                    <strong>Client Name: </strong>{{ item.client.name }}<br>
+                                {% endif %}
+
+                                {% if item.client.state_display %}
+                                    <strong>Client State: </strong>{{ item.client.state_display }}<br>
+                                {% endif %}
+
+                                <strong>Lobbying Activities:</strong>
+                            </p>
                             <ul>
-                                {% for entity in activity.government_entities %}
-                                    <li>{{ entity.name }}</li>
+                                {% for activity in item.lobbying_activities %}
+
+                                    {% if activity.general_issue_code %}
+                                        <li><strong>General Issue Code:</strong> {{ activity.general_issue_code }}</li>
+                                    {% endif %}
+
+                                    <li><strong>Government Entities:</strong></li>
+                                    <ul>
+                                        {% for entity in activity.government_entities %}
+                                            <li>{{ entity.name }}</li>
+                                        {% endfor %}
+                                    </ul>
                                 {% endfor %}
                             </ul>
-                        {% endfor %}
-                    </ul>
+                        </div>
+                    </div>
                 </div>
-                <hr>
             {% endfor %}
+        </div>
 
-        </ul>
-        <nav aria-label="Page navigation top" class="my-4">
+        <nav aria-label="Page navigation bottom" class="my-4">
             <ul class="pagination justify-content-center">
                 {% if page > 1 %}
                     <li class="page-item">

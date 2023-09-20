@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Contributions
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <nav aria-label="Page navigation top" class="my-4">
+            <ul class="pagination justify-content-center">
+                {% if page > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('get_contributions', page=page-1, filing_year=filing_year) }}"
+                           aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                <li class="page-item disabled">
+                    <span class="page-link">Page {{ page }}</span>
+                </li>
+
+                {% if page * per_page < total_data %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('get_contributions', page=page + 1, filing_year=filing_year) }}"
+                           aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        <h1 class="text-center my-4">Contributions</h1>
+
+        {% for item in data %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.filing_type_display }} ({{ item.filing_year }})</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ item.filing_period_display }}</h6>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Filer Type:</strong> {{ item.filer_type_display }}</p>
+                            <p><strong>Address:</strong> {{ item.address_1 }}, {{ item.city }}, {{ item.state_display }}, {{ item.country_display }}
+                            </p>
+                            <p><strong>Registrant:</strong> {{ item.registrant.name }}</p>
+                            <p><strong>Description:</strong> {{ item.registrant.description }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Lobbyist:</strong> {{ item.lobbyist.first_name }} {{ item.lobbyist.last_name }}
+                            </p>
+                            <p><strong>Document:</strong> <a href="{{ item.filing_document_url }}" target="_blank">View
+                                Document</a></p>
+                            <p><strong>Posted Date:</strong> {{ item.dt_posted }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

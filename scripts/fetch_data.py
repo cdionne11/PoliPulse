@@ -81,6 +81,17 @@ def fetch_filing_data(page=1, per_page=10, filing_year=2023):
         return None
 
 
+def fetch_contribution_data(page=1, per_page=10, filing_year=2023):
+    url = f"https://lda.senate.gov/api/v1/contributions/?page={page}&page_size={per_page}&filing_year={filing_year}"
+    response = requests.get(url)
+    print(response)
+    if response.status_code == 200:
+        data = response.json()
+        return data
+    else:
+        print(f"Failed to retrieve data. HTTP Status code: {response.status_code}")
+        return None
+
 
 def main():
     fetch_data('filings', Filing)
