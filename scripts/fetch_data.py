@@ -63,10 +63,21 @@ def fetch_data(endpoint, model):
 
 
 def fetch_lobbyist_data(page=1, per_page=10):
-    url = f"https://lda.senate.gov/api/v1/lobbyists/?page={page}&per_page={per_page}"
-    response = requests.get(url)
-    data = response.json()
-    return data
+    try:
+        url = f"https://lda.senate.gov/api/v1/lobbyists/?page={page}&per_page={per_page}"
+        response = requests.get(url)
+        response.raise_for_status()  # Check if the request was successful
+
+        data = response.json()
+        return data
+    except requests.exceptions.RequestException as e:
+        # If there is any issue with the request (like network issues, timeout, etc.), this block will be executed
+        print(f"Failed to fetch data: {e}")
+        return None
+    except ValueError:
+        # If the response cannot be decoded as JSON, this block will be executed
+        print("Failed to decode JSON from response")
+        return None
 
 
 def fetch_filing_data(page=1, per_page=10, filing_year=2023):
