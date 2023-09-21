@@ -1,36 +1,15 @@
-import os
 import requests
-from dotenv import load_dotenv
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 from db.models import Lobbyist
 import time  # Import the time module for rate limiting
+from db.session import SessionLocal
 
-# Load environment variables
-load_dotenv()
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATABASE_DIR = os.path.join(BASE_DIR, 'db')
-
-if not os.path.exists(DATABASE_DIR):
-    os.makedirs(DATABASE_DIR)
-
-db_path = os.path.join(DATABASE_DIR, 'polipulse.db')
-
-if not os.path.isfile(db_path):
-    open(db_path, 'w').close()
-
-DATABASE_URL = f"sqlite:///{db_path}"
-
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-db = SessionLocal()
 
 # Create a session for making API requests
 session = requests.Session()
 
 
 def fetch_lobbyist_data(page=1, per_page=1000, max_pages=None):
+    db = SessionLocal()
     try:
         while max_pages is None or page <= max_pages:
             url = f"https://lda.senate.gov/api/v1/lobbyists/?page={page}&per_page={per_page}"

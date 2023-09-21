@@ -1,17 +1,18 @@
 import requests
-from db.models import Registrant
+from db.models import Client
 import time
+from datetime import datetime
 from db.session import SessionLocal
 
 # Create a session for making API requests
 session = requests.Session()
 
 
-def fetch_registrant_data(page=1, per_page=1000, max_pages=None):
+def fetch_client_data(page=1, per_page=1000, max_pages=None, filing_year=2023):
     db = SessionLocal()
     try:
         while max_pages is None or page <= max_pages:
-            url = f"https://lda.senate.gov/api/v1/registrants/?page={page}&per_page={per_page}"
+            url = f"https://lda.senate.gov/api/v1/clients/?page={page}&per_page={per_page}&filing_year={filing_year}"
             response = requests.get(url)
             response.raise_for_status()  # Check if the request was successful
 
@@ -23,48 +24,42 @@ def fetch_registrant_data(page=1, per_page=1000, max_pages=None):
 
             # Access the 'results' list and iterate through it
             for result in data['results']:
-                registrant_data = {
+                client_data = {
                     'id': result['id'],
+                    'client_id': result['client_id'],
                     'url': result['url'],
-                    'house_registrant_id': result['house_registrant_id'],
                     'name': result['name'],
-                    'description': result['description'],
-                    'address_1': result['address_1'],
-                    'address_2': result['address_2'],
-                    'address_3': result['address_3'],
-                    'address_4': result['address_4'],
-                    'city': result['city'],
+                    'general_description': result['general_description'],
+                    'client_government_entity': result['client_government_entity'],
                     'state': result['state'],
                     'state_display': result['state_display'],
-                    'zip': result['zip'],
                     'country': result['country'],
                     'country_display': result['country_display'],
+                    'ppb_state': result['ppb_state'],
+                    'ppb_state_display': result['ppb_state_display'],
                     'ppb_country': result['ppb_country'],
                     'ppb_country_display': result['ppb_country_display'],
-                    'contact_name': result['contact_name'],
-                    'contact_telephone': result['contact_telephone'],
-                    'dt_updated': result['dt_updated']
+                    'effective_date': datetime.strptime(result['effective_date'], '%Y-%m-%d')  # Convert to date object
                 }
 
                 registrant = result.get('registrant')
 
                 if isinstance(registrant, dict):
-                    registrant_data['registrant_id'] = registrant.get('id')
+                    client_data['registrant_id'] = registrant.get('id')
 
-                # Attempt to merge the registrant data into the database
                 try:
-                    registrant_record = Registrant(**registrant_data)
-                    db.merge(registrant_record)
-                    print(f"Registrant added or updated: {registrant_record}")  # Debug print
+                    client_record = Client(**client_data)
+                    db.merge(client_record)
+                    print(f"Client added or updated: {client_record}")  # Debug print
                 except Exception as e:
-                    db.rollback()  # Rollback any changes if an error occurs
+                    db.rollback()
                     print(f"Failed to add or update registrant: {e}")
 
             # Commit the changes to the database
             db.commit()
 
             if not next_page:
-                break  # No more pages to fetch
+                break
 
             page += 1
 
@@ -88,7 +83,7 @@ def fetch_registrant_data(page=1, per_page=1000, max_pages=None):
 
 
 def main():
-    fetch_registrant_data(max_pages=100)  # Fetch data from the first 100 pages
+    fetch_client_data(max_pages=100)  # Fetch data from the first 100 pages
 
 
 if __name__ == "__main__":

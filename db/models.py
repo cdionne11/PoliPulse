@@ -8,6 +8,7 @@ Base = declarative_base()
 # Example date and time string from API response
 date_time_str = "2023-09-21T14:30:00Z"
 
+
 class User(Base):
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True, index=True)
@@ -57,11 +58,7 @@ class Filing(Base):
     registrant_city = Column(String)
     registrant_state = Column(String)
     registrant_zip = Column(String)
-    # lobbying_activities = Column(String)
     general_issue_code = Column(String)
-    # general_issue_code_display = Column(String)
-    # description = Column(String)
-    # foreign_entity_issues = Column(String)
     registrant_id = Column(Integer, ForeignKey('registrants.id'))  # Create a foreign key to a Registrant table
     client_id = Column(Integer, ForeignKey('clients.id'))  # Create a foreign key to a Client table
 
@@ -73,8 +70,30 @@ class Filing(Base):
 class Contribution(Base):
     __tablename__ = 'contributions'
     id = Column(Integer, primary_key=True, index=True)
-    donor_name = Column(String, index=True)
-    amount = Column(Integer)
+    url = Column(String)
+    filing_uuid = Column(String, unique=True)
+    filing_type = Column(String)
+    filing_type_display = Column(String)
+    filing_year = Column(String)
+    filing_period = Column(String)
+    filing_period_display = Column(String)
+    filing_document_url = Column(String)
+    filing_document_content_type = Column(String)
+    filer_type = Column(String)
+    filer_type_display = Column(String)
+    dt_posted = Column(String)
+    contact_name = Column(String)
+    comments = Column(String)
+    address_1 = Column(String)
+    address_2 = Column(String)
+    city = Column(String)
+    state = Column(String)
+    state_display = Column(String)
+    zip = Column(String)
+    country = Column(String)
+    country_display = Column(String)
+
+    registrant_id = Column(Integer, ForeignKey('registrants.id'), nullable=True)
 
 
 class Registrant(Base):
@@ -104,7 +123,6 @@ class Registrant(Base):
 
     lobbyists = relationship('Lobbyist', back_populates='registrant')
     filings = relationship('Filing', back_populates='registrant')
-
 
 
 class Client(Base):
@@ -185,5 +203,5 @@ class LobbistSuffixes(Base):
 class ContributionItemTypes(Base):
     __tablename__ = 'contribution_item_types'
     id = Column(Integer, primary_key=True, index=True)
-    value = Column(String, index=True)
+    value = Column(String, index=True, unique=True)
     name = Column(String, index=True)
