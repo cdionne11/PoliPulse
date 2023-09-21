@@ -1,9 +1,12 @@
 from sqlalchemy import create_engine, Column, Integer, String, Boolean, ForeignKey, Date, DateTime, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+from datetime import datetime
 
 Base = declarative_base()
 
+# Example date and time string from API response
+date_time_str = "2023-09-21T14:30:00Z"
 
 class User(Base):
     __tablename__ = 'user'
@@ -46,6 +49,19 @@ class Filing(Base):
     posted_by_name = Column(String)
     dt_posted = Column(DateTime)
     termination_date = Column(Date)  # Assuming termination_date should be a date type
+    registrant_country = Column(String)
+    registrant_ppb_country = Column(String)
+    registrant_address_1 = Column(String)
+    registrant_address_2 = Column(String)
+    registrant_different_address = Column(String)
+    registrant_city = Column(String)
+    registrant_state = Column(String)
+    registrant_zip = Column(String)
+    # lobbying_activities = Column(String)
+    general_issue_code = Column(String)
+    # general_issue_code_display = Column(String)
+    # description = Column(String)
+    # foreign_entity_issues = Column(String)
     registrant_id = Column(Integer, ForeignKey('registrants.id'))  # Create a foreign key to a Registrant table
     client_id = Column(Integer, ForeignKey('clients.id'))  # Create a foreign key to a Client table
 

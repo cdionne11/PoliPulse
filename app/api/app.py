@@ -1,10 +1,9 @@
-from flask import Flask, request, jsonify, render_template
-from db.models import Filing, Contribution, Registrant, Client, Lobbyist
+from flask import Flask, request, render_template
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 import os
 from dotenv import load_dotenv
-from scripts.fetch_data import fetch_lobbyist_data, fetch_filing_data, fetch_contribution_data
+from db.fetch_data import fetch_lobbyist_data, fetch_filing_data, fetch_contribution_data
 
 load_dotenv()
 

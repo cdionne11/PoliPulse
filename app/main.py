@@ -1,9 +1,7 @@
-import os
 from dotenv import load_dotenv
 
 from scripts import create_database
 from scripts.auth import authenticate
-from scripts import fetch_data
 
 # Import the Flask app object
 from api.app import app
